@@ -19,7 +19,7 @@ async def verify(file: UploadFile = File(...)):
         "model": "deepseek-vl2",
         "messages": [
             {
-                "role": "<|User|>",
+                "role": "user",
                 "content": (
                     "<image>\n"
                     "Is this an identity document? "
@@ -29,7 +29,7 @@ async def verify(file: UploadFile = File(...)):
                 "images": [image_b64]
             },
             {
-                "role": "<|Assistant|>",
+                "role": "assistant",
                 "content": ""
             }
         ]
