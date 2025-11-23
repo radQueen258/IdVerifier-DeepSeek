@@ -1,7 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 import base64
 import requests
-import json
 
 app = FastAPI()
 
@@ -11,25 +10,27 @@ DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions"
 @app.post("/verify")
 async def verify(file: UploadFile = File(...)):
 
-    # Read image
+    # Read image bytes
     image_bytes = await file.read()
     image_b64 = base64.b64encode(image_bytes).decode("utf-8")
 
+    # DeepSeek-VL2 uses special message format
     payload = {
         "model": "deepseek-vl2",
         "messages": [
             {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "Is this an identity document? Respond only using JSON: {is_id: true/false, confidence: number, type: string}."
-                    },
-                    {
-                        "type": "text",
-                        "image": image_b64
-                    }
-                ]
+                "role": "<|User|>",
+                "content": (
+                    "<image>\n"
+                    "Is this an identity document? "
+                    "Reply ONLY in this JSON format:\n"
+                    "{\"is_id\": true/false, \"confidence\": number, \"type\": \"id card/passport/license/unknown\"}."
+                ),
+                "images": [image_b64]
+            },
+            {
+                "role": "<|Assistant|>",
+                "content": ""
             }
         ]
     }
@@ -40,5 +41,4 @@ async def verify(file: UploadFile = File(...)):
     }
 
     response = requests.post(DEEPSEEK_URL, json=payload, headers=headers)
-
-    return {"deepseek_raw": response.json()}
+    return response.json()
