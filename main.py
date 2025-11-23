@@ -11,10 +11,8 @@ DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions"
 @app.post("/verify")
 async def verify(file: UploadFile = File(...)):
 
-    # Read image bytes
+    # Read image
     image_bytes = await file.read()
-    
-    # Encode to base64 (raw image, NOT data URL)
     image_b64 = base64.b64encode(image_bytes).decode("utf-8")
 
     payload = {
@@ -24,14 +22,12 @@ async def verify(file: UploadFile = File(...)):
                 "role": "user",
                 "content": [
                     {
-                        "type": "text",
-                        "text": "Is this an identity document? Return JSON only: {is_id: bool, confidence: number, type: string}"
+                        "type": "input_text",
+                        "text": "Is this an identity document? Respond only using JSON: {is_id: true/false, confidence: number, type: string}."
                     },
                     {
-                        "type": "image",
-                        "image": {
-                            "base64": image_b64
-                        }
+                        "type": "input_image",
+                        "image": image_b64
                     }
                 ]
             }
