@@ -26,7 +26,7 @@ async def verify(file: UploadFile = File(...)):
                         "text": "Is this an identity document? Respond only using JSON: {is_id: true/false, confidence: number, type: string}."
                     },
                     {
-                        "type": "input_image",
+                        "type": "image",
                         "image": image_b64
                     }
                 ]
