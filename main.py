@@ -4,7 +4,7 @@ import requests
 
 app = FastAPI()
 
-DEEPSEEK_API_KEY = "sk-a42aa6f136b44e66a5f4340d8dd03b2c"
+DEEPSEEK_API_KEY = "sk-3a178833406748dea5ea5e581b3e2e13"
 DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions"
 
 @app.post("/verify")
