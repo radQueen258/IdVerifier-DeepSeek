@@ -22,7 +22,7 @@ async def verify(file: UploadFile = File(...)):
                 "role": "user",
                 "content": [
                     {
-                        "type": "input_text",
+                        "type": "text",
                         "text": "Is this an identity document? Respond only using JSON: {is_id: true/false, confidence: number, type: string}."
                     },
                     {
